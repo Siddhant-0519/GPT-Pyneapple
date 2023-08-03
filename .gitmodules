@@ -1,0 +1,3 @@
+[submodule "Pyneapple"]
+	path = Pyneapple
+	url = https://github.com/MagdyLab/Pyneapple.git
