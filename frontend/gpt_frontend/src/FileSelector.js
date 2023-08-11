@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import { SelectedFileContext } from './App';
 
-const FileSelector = ({ setGeoJSON, setCurrFile}) => {
+const FileSelector = ({ setGeoJSON, setLabels, setColorMap}) => {
 
   const [files, setFiles] = useState([]);
   const [selectedFile, setSelectedFile] = useContext(SelectedFileContext);
@@ -18,7 +18,7 @@ const FileSelector = ({ setGeoJSON, setCurrFile}) => {
         }
       })
       .catch(error => console.error('Error fetching files:', error));
-  }, []);
+  }, [setSelectedFile]);
 
   const handleFileChange = (event) => {
     setSelectedFile(event.target.value);
@@ -31,6 +31,8 @@ const FileSelector = ({ setGeoJSON, setCurrFile}) => {
       .then(response => {
         console.log('Response from API:', response.data); // Check the response data from the API
         setGeoJSON(response.data); // Set the geoJSON state with the data
+        setLabels([]); // Reset labels
+        setColorMap({}); // Reset colorMap
         console.log('GeoJSON data set:', response.data); // Log the data set to geoJSON
       })
       .catch(error => console.error('Error fetching file data:', error));

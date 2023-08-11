@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 import { SelectedFileContext } from './App';
 
-const QueryInput = ({ onQuerySubmit }) => {
+const QueryInput = ({ onQuerySubmit, OnLabelsReceived }) => {
   const { transcript, resetTranscript, listening } = useSpeechRecognition();
   const [query, setQuery] = useState("");
   const [conversation, setConversation] = useState([]);
@@ -35,14 +35,15 @@ const QueryInput = ({ onQuerySubmit }) => {
       console.log(data)
       const plotData = JSON.parse(data.plot);
       console.log(plotData.labels)
+      OnLabelsReceived && OnLabelsReceived(plotData.labels);
       setConversation(prev => [...prev, { text: "YOU: " + query, type: 'user' }, { text: "AI: " + data.gptResponse, type: 'ai' }]);
       setQuery(""); // Clear the query after it has been submitted
-    //   setPlotLabels(plotData.labels);
-    //   console.log("plotLabels: ",plotLabels)
-    } else {
-      console.error('Server response:', response);
-    }
-  };
+    
+
+  } else {
+    console.error('Server response:', response);
+  }
+};
 
   const startListening = () => {
     SpeechRecognition.startListening({ continuous: true });
@@ -55,7 +56,7 @@ const QueryInput = ({ onQuerySubmit }) => {
 
   return (
     <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', alignItems: 'stretch' }}>
-      <div style={{ height: '200px', overflow: 'auto', border: '1px solid #ccc', padding: '10px', borderRadius: '5px' }}>
+      <div style={{ height: '600px', overflow: 'auto', border: '1px solid #ccc', padding: '10px', borderRadius: '5px' }}>
         {conversation.map((c, index) => (
           <p key={index} style={{ textAlign: c.type === 'user' ? 'left' : 'right', color: c.type === 'user' ? 'blue' : 'green' }}>
             {c.text}
