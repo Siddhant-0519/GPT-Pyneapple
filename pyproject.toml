@@ -18,6 +18,7 @@ openai = "^0.27.8"
 fastapi = "^0.99.1"
 uvicorn = "^0.22.0"
 python-dotenv = "^1.0.0"
+spopt = "^0.5.0"
 
 [tool.poetry.group.dev.dependencies]
 ipykernel = "^6.24.0"

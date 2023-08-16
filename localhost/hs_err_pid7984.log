@@ -1,0 +1,381 @@
+#
+# A fatal error has been detected by the Java Runtime Environment:
+#
+#  EXCEPTION_UNCAUGHT_CXX_EXCEPTION (0xe06d7363) at pc=0x00007ffd68874c3c, pid=7984, tid=0x0000000000002a1c
+#
+# JRE version: OpenJDK Runtime Environment (8.0_362-b09) (build 1.8.0_362-b09)
+# Java VM: OpenJDK 64-Bit Server VM (25.362-b09 mixed mode windows-amd64 compressed oops)
+# Problematic frame:
+# C  [KERNELBASE.dll+0x64c3c]
+#
+# Failed to write core dump. Minidumps are not enabled by default on client versions of Windows
+#
+# If you would like to submit a bug report, please visit:
+#   https://github.com/adoptium/adoptium-support/issues
+# The crash happened outside the Java Virtual Machine in native code.
+# See problematic frame for where to report the bug.
+#
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x000001f741328800):  JavaThread "main" [_thread_in_native, id=10780, stack(0x000000087dc00000,0x000000087ddf0000)]
+
+siginfo: ExceptionCode=0xe06d7363, ExceptionInformation=0x0000000019930520 0x000000087dde4260 0x00007ffce48a6e30 0x00007ffce4840000 
+
+Registers:
+RAX=0x000000007def04a0, RBX=0x000000087dde32d0, RCX=0x000000007de9ca50, RDX=0x000000087de9ded0
+RSP=0x000000087dde1810, RBP=0x000000087dde1ef0, RSI=0x000000087dde40d0, RDI=0x000000087dde26a0
+R8 =0x000000007df7fec8, R9 =0x000000087df7eb78, R10=0x000000007df72030, R11=0x000001f77de47800
+R12=0x0000000000000000, R13=0x000000087dde1978, R14=0x0000000000000002, R15=0x000000087dde2808
+RIP=0x00007ffd68874c3c, EFLAGS=0x0000000000000206
+
+Top of Stack: (sp=0x000000087dde1810)
+0x000000087dde1810:   0000000000000000 000000087dde32d0
+0x000000087dde1820:   000000087dde40d0 00007ffce485bd31
+0x000000087dde1830:   00000081e06d7363 0000000000000000
+0x000000087dde1840:   00007ffd68874c3c 0000000000000004
+0x000000087dde1850:   0000000019930520 000000087dde4260
+0x000000087dde1860:   00007ffce48a6e30 00007ffce4840000
+0x000000087dde1870:   0000b239457aced1 00007ffce488e13f
+0x000000087dde1880:   000000087dde32d0 00007ffd3e163489
+0x000000087dde1890:   0000000800000000 00007ffd3e1680e4
+0x000000087dde18a0:   00007ffd3f1642b0 00007ffd3f164280
+0x000000087dde18b0:   000000087dde26a0 00007ffd3e1633c9
+0x000000087dde18c0:   000000087dde32d0 000000087dde40d0
+0x000000087dde18d0:   0000852299a3d2fb 00007ffd3f164280
+0x000000087dde18e0:   000000087dde32d0 00007ffd3e162743
+0x000000087dde18f0:   00007ffce488e100 000000087dde2808
+0x000000087dde1900:   0000000800000100 00007ffd7deb9fa8 
+
+Instructions: (pc=0x00007ffd68874c3c)
+0x00007ffd68874c1c:   0f 46 c0 44 8b c0 44 89 44 24 38 49 c1 e0 03 e8
+0x00007ffd68874c2c:   97 df 05 00 48 8d 4c 24 20 48 ff 15 14 a6 1f 00
+0x00007ffd68874c3c:   0f 1f 44 00 00 48 8b 8c 24 c0 00 00 00 48 33 cc
+0x00007ffd68874c4c:   e8 2f 26 05 00 48 81 c4 d8 00 00 00 c3 cc 83 64 
+
+
+Register to memory mapping:
+
+RAX=0x000000007def04a0 is an unknown value
+RBX=0x000000087dde32d0 is pointing into the stack for thread: 0x000001f741328800
+RCX=0x000000007de9ca50 is an unknown value
+RDX=0x000000087de9ded0 is an unknown value
+RSP=0x000000087dde1810 is pointing into the stack for thread: 0x000001f741328800
+RBP=0x000000087dde1ef0 is pointing into the stack for thread: 0x000001f741328800
+RSI=0x000000087dde40d0 is pointing into the stack for thread: 0x000001f741328800
+RDI=0x000000087dde26a0 is pointing into the stack for thread: 0x000001f741328800
+R8 =0x000000007df7fec8 is an unknown value
+R9 =0x000000087df7eb78 is an unknown value
+R10=0x000000007df72030 is an unknown value
+R11=0x000001f77de47800 is pointing into metadata
+R12=0x0000000000000000 is an unknown value
+R13=0x000000087dde1978 is pointing into the stack for thread: 0x000001f741328800
+R14=0x0000000000000002 is an unknown value
+R15=0x000000087dde2808 is pointing into the stack for thread: 0x000001f741328800
+
+
+Stack: [0x000000087dc00000,0x000000087ddf0000],  sp=0x000000087dde1810,  free space=1926k
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+C  [KERNELBASE.dll+0x64c3c]
+C  [VCRUNTIME140_1.dll+0x2743]
+C  [ntdll.dll+0xa3646]
+C  0x00007ffce487ae61
+C  0x00007ffce487b6b3
+C  0x00007ffce486afcb
+C  0x000001f742449c8e
+
+Java frames: (J=compiled Java code, j=interpreted, Vv=VM code)
+j  org.jpype.manager.TypeFactoryNative.newWrapper(JJ)V+0
+j  org.jpype.JPypeContext.newWrapper(J)V+16
+v  ~StubRoutines::call_stub
+
+---------------  P R O C E S S  ---------------
+
+Java Threads: ( => current thread )
+  0x000001f741949000 JavaThread "SIGINT handler" daemon [_thread_blocked, id=16664, stack(0x0000000801b20000,0x0000000801d10000)]
+  0x000001f7416e7800 JavaThread "Service Thread" daemon [_thread_blocked, id=12504, stack(0x0000000801550000,0x0000000801740000)]
+  0x000001f7305a1800 JavaThread "C1 CompilerThread3" daemon [_thread_blocked, id=13432, stack(0x0000000801360000,0x0000000801550000)]
+  0x000001f741660000 JavaThread "C2 CompilerThread2" daemon [_thread_blocked, id=14768, stack(0x0000000801170000,0x0000000801360000)]
+  0x000001f74165e800 JavaThread "C2 CompilerThread1" daemon [_thread_blocked, id=9064, stack(0x0000000800f80000,0x0000000801170000)]
+  0x000001f74165c000 JavaThread "C2 CompilerThread0" daemon [_thread_blocked, id=3712, stack(0x0000000800d90000,0x0000000800f80000)]
+  0x000001f741652000 JavaThread "Attach Listener" daemon [_thread_blocked, id=4372, stack(0x0000000800ba0000,0x0000000800d90000)]
+  0x000001f74160e800 JavaThread "Signal Dispatcher" daemon [_thread_blocked, id=13960, stack(0x00000008009b0000,0x0000000800ba0000)]
+  0x000001f7415f9000 JavaThread "Finalizer" daemon [_thread_blocked, id=14044, stack(0x00000008007c0000,0x00000008009b0000)]
+  0x000001f7415f2000 JavaThread "Reference Handler" daemon [_thread_blocked, id=11336, stack(0x00000008005d0000,0x00000008007c0000)]
+=>0x000001f741328800 JavaThread "main" [_thread_in_native, id=10780, stack(0x000000087dc00000,0x000000087ddf0000)]
+
+Other Threads:
+  0x000001f7415e1000 VMThread [stack: 0x00000008003e0000,0x00000008005d0000] [id=9228]
+  0x000001f7416e9800 WatcherThread [stack: 0x0000000801740000,0x0000000801930000] [id=18992]
+
+VM state:not at safepoint (normal execution)
+
+VM Mutex/Monitor currently owned by a thread: None
+
+heap address: 0x00000002c0000000, size: 20480 MB, Compressed Oops mode: Zero based, Oop shift amount: 3
+Narrow klass base: 0x0000000000000000, Narrow klass shift: 3
+Compressed class space size: 1073741824 Address: 0x00000007c0000000
+
+Heap:
+ PSYoungGen      total 75264K, used 6451K [0x0000000615580000, 0x000000061a980000, 0x00000007c0000000)
+  eden space 64512K, 10% used [0x0000000615580000,0x0000000615bcce38,0x0000000619480000)
+  from space 10752K, 0% used [0x0000000619480000,0x0000000619480000,0x0000000619f00000)
+  to   space 10752K, 0% used [0x0000000619f00000,0x0000000619f00000,0x000000061a980000)
+ ParOldGen       total 172032K, used 696K [0x00000002c0000000, 0x00000002ca800000, 0x0000000615580000)
+  object space 172032K, 0% used [0x00000002c0000000,0x00000002c00ae028,0x00000002ca800000)
+ Metaspace       used 4265K, capacity 4770K, committed 4992K, reserved 1056768K
+  class space    used 476K, capacity 529K, committed 640K, reserved 1048576K
+
+Card table byte_map: [0x000001f7517f0000,0x000001f754000000] byte_map_base: 0x000001f7501f0000
+
+Marking Bits: (ParMarkBitMap*) 0x000000005616f7f0
+ Begin Bits: [0x000001f755ab0000, 0x000001f769ab0000)
+ End Bits:   [0x000001f769ab0000, 0x000001f77dab0000)
+
+Polling page: 0x000001f742400000
+
+CodeCache: size=245760Kb used=1602Kb max_used=1615Kb free=244157Kb
+ bounds [0x000001f742430000, 0x000001f7426a0000, 0x000001f751430000]
+ total_blobs=532 nmethods=244 adapters=201
+ compilation: enabled
+
+Compilation events (10 events):
+Event: 0.139 Thread 0x000001f7305a1800 nmethod 233 0x000001f7425b8b10 code [0x000001f7425b8e60, 0x000001f7425babb0]
+Event: 0.139 Thread 0x000001f7305a1800  238       3       org.jpype.manager.MethodResolution::isAssignableTo (71 bytes)
+Event: 0.139 Thread 0x000001f7305a1800 nmethod 238 0x000001f7425bbdd0 code [0x000001f7425bbf80, 0x000001f7425bc6c0]
+Event: 0.139 Thread 0x000001f7305a1800  236       3       java.lang.StringBuilder::length (5 bytes)
+Event: 0.140 Thread 0x000001f7305a1800 nmethod 236 0x000001f7425bc950 code [0x000001f7425bcaa0, 0x000001f7425bcc18]
+Event: 0.140 Thread 0x000001f7305a1800  230       3       java.util.TreeSet::add (22 bytes)
+Event: 0.140 Thread 0x000001f7305a1800 nmethod 230 0x000001f7425bcc90 code [0x000001f7425bce00, 0x000001f7425bd090]
+Event: 0.140 Thread 0x000001f7305a1800  229       3       java.util.TreeMap::leftOf (13 bytes)
+Event: 0.140 Thread 0x000001f7305a1800 nmethod 229 0x000001f7425bd150 code [0x000001f7425bd2a0, 0x000001f7425bd458]
+Event: 0.141 Thread 0x000001f7305a1800  243       3       java.util.TreeMap::successor (66 bytes)
+
+GC Heap History (4 events):
+Event: 0.096 GC heap before
+{Heap before GC invocations=1 (full 0):
+ PSYoungGen      total 75264K, used 3875K [0x0000000615580000, 0x000000061a980000, 0x00000007c0000000)
+  eden space 64512K, 6% used [0x0000000615580000,0x0000000615948ca0,0x0000000619480000)
+  from space 10752K, 0% used [0x0000000619f00000,0x0000000619f00000,0x000000061a980000)
+  to   space 10752K, 0% used [0x0000000619480000,0x0000000619480000,0x0000000619f00000)
+ ParOldGen       total 172032K, used 0K [0x00000002c0000000, 0x00000002ca800000, 0x0000000615580000)
+  object space 172032K, 0% used [0x00000002c0000000,0x00000002c0000000,0x00000002ca800000)
+ Metaspace       used 3986K, capacity 4732K, committed 4864K, reserved 1056768K
+  class space    used 454K, capacity 496K, committed 512K, reserved 1048576K
+Event: 0.097 GC heap after
+Heap after GC invocations=1 (full 0):
+ PSYoungGen      total 75264K, used 880K [0x0000000615580000, 0x000000061a980000, 0x00000007c0000000)
+  eden space 64512K, 0% used [0x0000000615580000,0x0000000615580000,0x0000000619480000)
+  from space 10752K, 8% used [0x0000000619480000,0x000000061955c010,0x0000000619f00000)
+  to   space 10752K, 0% used [0x0000000619f00000,0x0000000619f00000,0x000000061a980000)
+ ParOldGen       total 172032K, used 8K [0x00000002c0000000, 0x00000002ca800000, 0x0000000615580000)
+  object space 172032K, 0% used [0x00000002c0000000,0x00000002c0002000,0x00000002ca800000)
+ Metaspace       used 3986K, capacity 4732K, committed 4864K, reserved 1056768K
+  class space    used 454K, capacity 496K, committed 512K, reserved 1048576K
+}
+Event: 0.097 GC heap before
+{Heap before GC invocations=2 (full 1):
+ PSYoungGen      total 75264K, used 880K [0x0000000615580000, 0x000000061a980000, 0x00000007c0000000)
+  eden space 64512K, 0% used [0x0000000615580000,0x0000000615580000,0x0000000619480000)
+  from space 10752K, 8% used [0x0000000619480000,0x000000061955c010,0x0000000619f00000)
+  to   space 10752K, 0% used [0x0000000619f00000,0x0000000619f00000,0x000000061a980000)
+ ParOldGen       total 172032K, used 8K [0x00000002c0000000, 0x00000002ca800000, 0x0000000615580000)
+  object space 172032K, 0% used [0x00000002c0000000,0x00000002c0002000,0x00000002ca800000)
+ Metaspace       used 3986K, capacity 4732K, committed 4864K, reserved 1056768K
+  class space    used 454K, capacity 496K, committed 512K, reserved 1048576K
+Event: 0.102 GC heap after
+Heap after GC invocations=2 (full 1):
+ PSYoungGen      total 75264K, used 0K [0x0000000615580000, 0x000000061a980000, 0x00000007c0000000)
+  eden space 64512K, 0% used [0x0000000615580000,0x0000000615580000,0x0000000619480000)
+  from space 10752K, 0% used [0x0000000619480000,0x0000000619480000,0x0000000619f00000)
+  to   space 10752K, 0% used [0x0000000619f00000,0x0000000619f00000,0x000000061a980000)
+ ParOldGen       total 172032K, used 696K [0x00000002c0000000, 0x00000002ca800000, 0x0000000615580000)
+  object space 172032K, 0% used [0x00000002c0000000,0x00000002c00ae028,0x00000002ca800000)
+ Metaspace       used 3986K, capacity 4732K, committed 4864K, reserved 1056768K
+  class space    used 454K, capacity 496K, committed 512K, reserved 1048576K
+}
+
+Deoptimization events (0 events):
+No events
+
+Classes redefined (0 events):
+No events
+
+Internal exceptions (4 events):
+Event: 0.017 Thread 0x000001f741328800 Exception <a 'java/lang/NoSuchMethodError': Method sun.misc.Unsafe.defineClass(Ljava/lang/String;[BII)Ljava/lang/Class; name or signature does not match> (0x0000000615587cd8) thrown at [J:\jenkins\tmp\workspace\build\src\hotspot\src\share\vm\prims\jni.cpp
+Event: 0.017 Thread 0x000001f741328800 Exception <a 'java/lang/NoSuchMethodError': Method sun.misc.Unsafe.prefetchRead(Ljava/lang/Object;J)V name or signature does not match> (0x0000000615587fc0) thrown at [J:\jenkins\tmp\workspace\build\src\hotspot\src\share\vm\prims\jni.cpp, line 4012]
+Event: 0.044 Thread 0x000001f741328800 Exception <a 'java/lang/NoClassDefFoundError': org/jpype/classloader/DynamicClassLoader> (0x00000006155eda28) thrown at [J:\jenkins\tmp\workspace\build\src\hotspot\src\share\vm\classfile\systemDictionary.cpp, line 206]
+Event: 0.141 Thread 0x000001f7417c8000 Exception <a 'java/lang/InterruptedException'> (0x00000006155800c8) thrown at [J:\jenkins\tmp\workspace\build\src\hotspot\src\share\vm\runtime\objectMonitor.cpp, line 1692]
+
+Events (10 events):
+Event: 0.140 loading class java/util/function/Consumer done
+Event: 0.140 loading class java/util/concurrent/locks/AbstractOwnableSynchronizer
+Event: 0.140 loading class java/util/concurrent/locks/AbstractOwnableSynchronizer done
+Event: 0.140 Executing VM operation: ThreadDump
+Event: 0.141 Executing VM operation: ThreadDump done
+Event: 0.141 loading class java/util/HashMap$KeySet
+Event: 0.141 loading class java/util/HashMap$KeySet done
+Event: 0.141 loading class java/util/HashMap$KeyIterator
+Event: 0.141 loading class java/util/HashMap$KeyIterator done
+Event: 0.141 Thread 0x000001f7417c8000 Thread exited: 0x000001f7417c8000
+
+
+Dynamic libraries:
+0x00007ff7e4d60000 - 0x00007ff7e4d7c000 	c:\users\siddh\.pyenv\pyenv-win\versions\3.9.0\python.exe
+0x00007ffd6b310000 - 0x00007ffd6b524000 	C:\Windows\SYSTEM32\ntdll.dll
+0x00007ffd69b30000 - 0x00007ffd69bf4000 	C:\Windows\System32\KERNEL32.DLL
+0x00007ffd68810000 - 0x00007ffd68bb4000 	C:\Windows\System32\KERNELBASE.dll
+0x00007ffd68d10000 - 0x00007ffd68e21000 	C:\Windows\System32\ucrtbase.dll
+0x00007ffce5270000 - 0x00007ffce56dc000 	c:\users\siddh\.pyenv\pyenv-win\versions\3.9.0\python39.dll
+0x00007ffd3f150000 - 0x00007ffd3f169000 	c:\users\siddh\.pyenv\pyenv-win\versions\3.9.0\VCRUNTIME140.dll
+0x00007ffd690e0000 - 0x00007ffd69151000 	C:\Windows\System32\WS2_32.dll
+0x00007ffd6b140000 - 0x00007ffd6b257000 	C:\Windows\System32\RPCRT4.dll
+0x00007ffd69980000 - 0x00007ffd69a30000 	C:\Windows\System32\ADVAPI32.dll
+0x00007ffd5a5f0000 - 0x00007ffd5a5fa000 	C:\Windows\SYSTEM32\VERSION.dll
+0x00007ffd698d0000 - 0x00007ffd69977000 	C:\Windows\System32\msvcrt.dll
+0x00007ffd69820000 - 0x00007ffd698c6000 	C:\Windows\System32\sechost.dll
+0x00007ffd67ef0000 - 0x00007ffd67f0b000 	C:\Windows\SYSTEM32\CRYPTSP.dll
+0x00007ffd67760000 - 0x00007ffd67795000 	C:\Windows\system32\rsaenh.dll
+0x00007ffd67f10000 - 0x00007ffd67f1c000 	C:\Windows\SYSTEM32\CRYPTBASE.dll
+0x00007ffd68bc0000 - 0x00007ffd68c3a000 	C:\Windows\System32\bcryptPrimitives.dll
+0x00007ffd587c0000 - 0x00007ffd587cf000 	c:\users\siddh\.pyenv\pyenv-win\versions\3.9.0\python3.DLL
+0x00007ffd3dcd0000 - 0x00007ffd3dce6000 	c:\users\siddh\.pyenv\pyenv-win\versions\3.9.0\DLLs\_socket.pyd
+0x00007ffd67280000 - 0x00007ffd672ad000 	C:\Windows\SYSTEM32\IPHLPAPI.DLL
+0x00007ffd52320000 - 0x00007ffd52329000 	c:\users\siddh\.pyenv\pyenv-win\versions\3.9.0\DLLs\select.pyd
+0x00007ffd326a0000 - 0x00007ffd326c7000 	c:\users\siddh\.pyenv\pyenv-win\versions\3.9.0\DLLs\_ssl.pyd
+0x00007ffd68f60000 - 0x00007ffd690c7000 	C:\Windows\System32\CRYPT32.dll
+0x00007ffd00490000 - 0x00007ffd0053c000 	c:\users\siddh\.pyenv\pyenv-win\versions\3.9.0\DLLs\libssl-1_1.dll
+0x00007ffcefbf0000 - 0x00007ffceff36000 	c:\users\siddh\.pyenv\pyenv-win\versions\3.9.0\DLLs\libcrypto-1_1.dll
+0x00007ffd69400000 - 0x00007ffd695aa000 	C:\Windows\System32\USER32.dll
+0x00007ffd68c40000 - 0x00007ffd68c66000 	C:\Windows\System32\win32u.dll
+0x00007ffd6a0d0000 - 0x00007ffd6a0f9000 	C:\Windows\System32\GDI32.dll
+0x00007ffd686f0000 - 0x00007ffd68809000 	C:\Windows\System32\gdi32full.dll
+0x00007ffd68c70000 - 0x00007ffd68d0a000 	C:\Windows\System32\msvcp_win.dll
+0x00007ffd68090000 - 0x00007ffd680b8000 	C:\Windows\SYSTEM32\bcrypt.dll
+0x00007ffd69c00000 - 0x00007ffd69c31000 	C:\Windows\System32\IMM32.DLL
+0x00007ffd3f720000 - 0x00007ffd3f732000 	c:\users\siddh\.pyenv\pyenv-win\versions\3.9.0\DLLs\_asyncio.pyd
+0x00007ffd4f820000 - 0x00007ffd4f82d000 	c:\users\siddh\.pyenv\pyenv-win\versions\3.9.0\DLLs\_overlapped.pyd
+0x00007ffd67ca0000 - 0x00007ffd67d09000 	C:\Windows\system32\mswsock.dll
+0x00007ffd3ee00000 - 0x00007ffd3ee17000 	c:\users\siddh\.pyenv\pyenv-win\versions\3.9.0\DLLs\_bz2.pyd
+0x00007ffd01f20000 - 0x00007ffd01f4a000 	c:\users\siddh\.pyenv\pyenv-win\versions\3.9.0\DLLs\_lzma.pyd
+0x00007ffd528b0000 - 0x00007ffd528b9000 	c:\users\siddh\.pyenv\pyenv-win\versions\3.9.0\DLLs\_queue.pyd
+0x00007ffd25b60000 - 0x00007ffd25b80000 	c:\users\siddh\.pyenv\pyenv-win\versions\3.9.0\DLLs\_ctypes.pyd
+0x00007ffd691b0000 - 0x00007ffd6934c000 	C:\Windows\System32\ole32.dll
+0x00007ffd6aa60000 - 0x00007ffd6adea000 	C:\Windows\System32\combase.dll
+0x00007ffd4f7c0000 - 0x00007ffd4f7cb000 	c:\users\siddh\.pyenv\pyenv-win\versions\3.9.0\DLLs\libffi-7.dll
+0x00007ffd69a50000 - 0x00007ffd69b27000 	C:\Windows\System32\OLEAUT32.dll
+0x00007ffd6a230000 - 0x00007ffd6aa46000 	C:\Windows\System32\shell32.DLL
+0x00007ffd4c460000 - 0x00007ffd4c469000 	c:\users\siddh\.pyenv\pyenv-win\versions\3.9.0\DLLs\_multiprocessing.pyd
+0x00007ffd59eb0000 - 0x00007ffd59ec3000 	c:\users\siddh\.pyenv\pyenv-win\versions\3.9.0\DLLs\_hashlib.pyd
+0x00007ffd62d50000 - 0x00007ffd62d5e000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\pydantic\__init__.cp39-win_amd64.pyd
+0x00007ffd30110000 - 0x00007ffd30144000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\pydantic\dataclasses.cp39-win_amd64.pyd
+0x00007ffd2df50000 - 0x00007ffd2df83000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\pydantic\class_validators.cp39-win_amd64.pyd
+0x00007ffd2b8f0000 - 0x00007ffd2b921000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\pydantic\errors.cp39-win_amd64.pyd
+0x00007ffd2b8a0000 - 0x00007ffd2b8e4000 	c:\users\siddh\.pyenv\pyenv-win\versions\3.9.0\DLLs\_decimal.pyd
+0x00007ffd1e7e0000 - 0x00007ffd1e817000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\pydantic\typing.cp39-win_amd64.pyd
+0x00007ffd18a50000 - 0x00007ffd18a9e000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\pydantic\utils.cp39-win_amd64.pyd
+0x00007ffd57250000 - 0x00007ffd57262000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\pydantic\version.cp39-win_amd64.pyd
+0x00007ffd30520000 - 0x00007ffd30538000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\pydantic\config.cp39-win_amd64.pyd
+0x00007ffd2df20000 - 0x00007ffd2df42000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\pydantic\error_wrappers.cp39-win_amd64.pyd
+0x00007ffd2a4b0000 - 0x00007ffd2a4c7000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\pydantic\json.cp39-win_amd64.pyd
+0x00007ffd532b0000 - 0x00007ffd532b8000 	c:\users\siddh\.pyenv\pyenv-win\versions\3.9.0\DLLs\_uuid.pyd
+0x00007ffd18a10000 - 0x00007ffd18a4d000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\pydantic\color.cp39-win_amd64.pyd
+0x00007ffd189c0000 - 0x00007ffd18a02000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\pydantic\networks.cp39-win_amd64.pyd
+0x00007ffd18970000 - 0x00007ffd189b9000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\pydantic\validators.cp39-win_amd64.pyd
+0x00007ffd22ec0000 - 0x00007ffd22edd000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\pydantic\datetime_parse.cp39-win_amd64.pyd
+0x00007ffd18910000 - 0x00007ffd18970000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\pydantic\types.cp39-win_amd64.pyd
+0x00007ffd18510000 - 0x00007ffd18577000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\pydantic\fields.cp39-win_amd64.pyd
+0x00007ffd17ec0000 - 0x00007ffd17f25000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\pydantic\main.cp39-win_amd64.pyd
+0x00007ffd1f840000 - 0x00007ffd1f851000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\pydantic\parse.cp39-win_amd64.pyd
+0x00007ffd188b0000 - 0x00007ffd1890e000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\pydantic\schema.cp39-win_amd64.pyd
+0x00007ffd1f2d0000 - 0x00007ffd1f2e5000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\pydantic\annotated_types.cp39-win_amd64.pyd
+0x00007ffd1d5f0000 - 0x00007ffd1d617000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\pydantic\decorator.cp39-win_amd64.pyd
+0x00007ffd18660000 - 0x00007ffd18690000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\pydantic\env_settings.cp39-win_amd64.pyd
+0x00007ffd18cd0000 - 0x00007ffd18ce5000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\pydantic\tools.cp39-win_amd64.pyd
+0x00007ffcc20c0000 - 0x00007ffcc3f9a000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\numpy\.libs\libopenblas64__v0.3.23-gcc_10_3_0.dll
+0x00007ffcfff00000 - 0x00007ffd001df000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\numpy\core\_multiarray_umath.cp39-win_amd64.pyd
+0x00007ffd17ea0000 - 0x00007ffd17eb5000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\numpy\core\_multiarray_tests.cp39-win_amd64.pyd
+0x00007ffd17e80000 - 0x00007ffd17e9e000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\numpy\linalg\_umath_linalg.cp39-win_amd64.pyd
+0x00007ffd17b90000 - 0x00007ffd17bb0000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\numpy\fft\_pocketfft_internal.cp39-win_amd64.pyd
+0x00007ffd003f0000 - 0x00007ffd00481000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\numpy\random\mtrand.cp39-win_amd64.pyd
+0x00007ffd106d0000 - 0x00007ffd106f8000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\numpy\random\bit_generator.cp39-win_amd64.pyd
+0x00007ffd0e030000 - 0x00007ffd0e061000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\numpy\random\_common.cp39-win_amd64.pyd
+0x00007ffd003a0000 - 0x00007ffd003e6000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\numpy\random\_bounded_integers.cp39-win_amd64.pyd
+0x00007ffd15170000 - 0x00007ffd15185000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\numpy\random\_mt19937.cp39-win_amd64.pyd
+0x00007ffd10630000 - 0x00007ffd10644000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\numpy\random\_philox.cp39-win_amd64.pyd
+0x00007ffd01f00000 - 0x00007ffd01f17000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\numpy\random\_pcg64.cp39-win_amd64.pyd
+0x00007ffd59e20000 - 0x00007ffd59e30000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\numpy\random\_sfc64.cp39-win_amd64.pyd
+0x00007ffcfa150000 - 0x00007ffcfa1f7000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\numpy\random\_generator.cp39-win_amd64.pyd
+0x00007ffcfa060000 - 0x00007ffcfa148000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\pandas\_libs\interval.cp39-win_amd64.pyd
+0x00007ffcf9320000 - 0x00007ffcf948c000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\pandas\_libs\hashtable.cp39-win_amd64.pyd
+0x00007ffd00370000 - 0x00007ffd00399000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\pandas\_libs\missing.cp39-win_amd64.pyd
+0x00007ffd01ee0000 - 0x00007ffd01efd000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\pandas\_libs\tslibs\dtypes.cp39-win_amd64.pyd
+0x00007ffd00680000 - 0x00007ffd0069c000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\pandas\_libs\tslibs\np_datetime.cp39-win_amd64.pyd
+0x00007ffcffed0000 - 0x00007ffcffefc000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\pandas\_libs\tslibs\conversion.cp39-win_amd64.pyd
+0x00007ffd58f00000 - 0x00007ffd58f0d000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\pandas\_libs\tslibs\base.cp39-win_amd64.pyd
+0x00007ffcf9270000 - 0x00007ffcf9314000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\pandas\_libs\tslibs\offsets.cp39-win_amd64.pyd
+0x00007ffcf9f90000 - 0x00007ffcf9ff9000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\pandas\_libs\tslibs\timestamps.cp39-win_amd64.pyd
+0x00007ffcff310000 - 0x00007ffcff33f000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\pandas\_libs\tslibs\nattype.cp39-win_amd64.pyd
+0x00007ffcf8f70000 - 0x00007ffcf8fd7000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\pandas\_libs\tslibs\timedeltas.cp39-win_amd64.pyd
+0x00007ffcfa030000 - 0x00007ffcfa05f000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\pandas\_libs\tslibs\timezones.cp39-win_amd64.pyd
+0x00007ffd589f0000 - 0x00007ffd589fe000 	c:\users\siddh\.pyenv\pyenv-win\versions\3.9.0\DLLs\_zoneinfo.pyd
+0x000001f73ff50000 - 0x000001f73ff53000 	C:\Windows\SYSTEM32\tzres.dll
+0x00007ffcf9230000 - 0x00007ffcf926c000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\pandas\_libs\tslibs\fields.cp39-win_amd64.pyd
+0x00007ffd4bc10000 - 0x00007ffd4bc1f000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\pandas\_libs\tslibs\ccalendar.cp39-win_amd64.pyd
+0x00007ffcf8f30000 - 0x00007ffcf8f68000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\pandas\_libs\tslibs\tzconversion.cp39-win_amd64.pyd
+0x00007ffcfa7a0000 - 0x00007ffcfa7b1000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\pandas\_libs\properties.cp39-win_amd64.pyd
+0x00007ffcf8ee0000 - 0x00007ffcf8f28000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\pandas\_libs\tslibs\parsing.cp39-win_amd64.pyd
+0x00007ffcf8ea0000 - 0x00007ffcf8ed9000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\pandas\_libs\tslibs\strptime.cp39-win_amd64.pyd
+0x00007ffcf8e40000 - 0x00007ffcf8e94000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\pandas\_libs\tslibs\period.cp39-win_amd64.pyd
+0x00007ffcf8a30000 - 0x00007ffcf8a5a000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\pandas\_libs\tslibs\vectorized.cp39-win_amd64.pyd
+0x00007ffd44020000 - 0x00007ffd4402f000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\pandas\_libs\ops_dispatch.cp39-win_amd64.pyd
+0x00007ffcf0fe0000 - 0x00007ffcf1164000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\pandas\_libs\algos.cp39-win_amd64.pyd
+0x00007ffcf31a0000 - 0x00007ffcf3219000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\pandas\_libs\lib.cp39-win_amd64.pyd
+0x00007ffcf4db0000 - 0x00007ffcf4dd5000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\pandas\_libs\hashing.cp39-win_amd64.pyd
+0x00007ffcf3160000 - 0x00007ffcf3194000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\pandas\_libs\tslib.cp39-win_amd64.pyd
+0x00007ffcf2220000 - 0x00007ffcf2334000 	c:\users\siddh\.pyenv\pyenv-win\versions\3.9.0\DLLs\unicodedata.pyd
+0x00007ffcf3130000 - 0x00007ffcf315e000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\pandas\_libs\ops.cp39-win_amd64.pyd
+0x00007ffcf8e20000 - 0x00007ffcf8e34000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\pandas\_libs\arrays.cp39-win_amd64.pyd
+0x00007ffcf27e0000 - 0x00007ffcf289e000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\pandas\_libs\sparse.cp39-win_amd64.pyd
+0x00007ffd40680000 - 0x00007ffd4068c000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\pandas\_libs\reduction.cp39-win_amd64.pyd
+0x00007ffd3ed90000 - 0x00007ffd3ed9f000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\pandas\_libs\indexing.cp39-win_amd64.pyd
+0x00007ffcf1d10000 - 0x00007ffcf1da4000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\pandas\_libs\index.cp39-win_amd64.pyd
+0x00007ffcf30f0000 - 0x00007ffcf312f000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\pandas\_libs\internals.cp39-win_amd64.pyd
+0x00007ffcf08a0000 - 0x00007ffcf0a36000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\pandas\_libs\join.cp39-win_amd64.pyd
+0x00007ffcf30c0000 - 0x00007ffcf30ea000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\pandas\_libs\writers.cp39-win_amd64.pyd
+0x00007ffcf0bf0000 - 0x00007ffcf0c3f000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\pandas\_libs\window\aggregations.cp39-win_amd64.pyd
+0x00007ffcf0b60000 - 0x00007ffcf0bed000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\pandas\_libs\window\MSVCP140.dll
+0x00007ffd3e160000 - 0x00007ffd3e16c000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\pandas\_libs\window\VCRUNTIME140_1.dll
+0x00007ffcf27b0000 - 0x00007ffcf27d3000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\pandas\_libs\window\indexers.cp39-win_amd64.pyd
+0x00007ffcf0b20000 - 0x00007ffcf0b55000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\pandas\_libs\reshape.cp39-win_amd64.pyd
+0x00007ffce50d0000 - 0x00007ffce5269000 	C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\lib\site-packages\pandas\_libs\groupby.cp39-win_amd64.pyd
+
+VM Arguments:
+jvm_args: -Xmx20480m 
+java_command: <unknown>
+java_class_path (initial): D:\user_pa1n\VSCode\projects\GPT-Pyneapple\Pyneapple\pyneapple\pyneapple-0.1.0-SNAPSHOT-jar-with-dependencies.jar
+Launcher Type: generic
+
+Environment Variables:
+JAVA_HOME=C:\Program Files\Eclipse Adoptium\jdk-8.0.362.9-hotspot\
+PATH=C:\Users\siddh\AppData\Local\pypoetry\Cache\virtualenvs\gpt-pyneapple-sI-tQXuv-py3.9\Scripts;C:\Program Files\Eclipse Adoptium\jdk-11.0.18.10-hotspot\bin;C:\Program Files\Eclipse Adoptium\jdk-17.0.6.10-hotspot\bin;C:\Program Files\Eclipse Adoptium\jdk-8.0.362.9-hotspot\bin;C:\Program Files\Eclipse Adoptium\jre-8.0.362.9-hotspot\bin;C:\Program Files\Eclipse Adoptium\jre-17.0.6.10-hotspot\bin;C:\Program Files\Eclipse Adoptium\jre-11.0.18.10-hotspot\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\dotnet\;D:\user_pa1n\apps\putty\;D:\user_pa1n\apps\Git\cmd;C:\Users\siddh\.pyenv\pyenv-win\;C:\Program Files\OpenSSL-Win64\bin;C:\Program Files\nvm;C:\Program Files\nodejs;C:\Users\siddh\.pyenv\pyenv-win\bin;C:\Users\siddh\.pyenv\pyenv-win\shims;C:\Users\siddh\AppData\Local\Microsoft\WindowsApps;D:\user_pa1n\apps\Microsoft VS Code\bin;C:\Users\siddh\AppData\Roaming\npm;C:\Program Files\nvm;C:\Program Files\nodejs
+USERNAME=siddh
+OS=Windows_NT
+PROCESSOR_IDENTIFIER=Intel64 Family 6 Model 140 Stepping 1, GenuineIntel
+
+
+
+---------------  S Y S T E M  ---------------
+
+OS: Windows 11 , 64 bit Build 22621 (10.0.22621.2070)
+
+CPU:total 8 (initial active 8) (4 cores per cpu, 2 threads per core) family 6 model 140 stepping 1, cmov, cx8, fxsr, mmx, sse, sse2, sse3, ssse3, sse4.1, sse4.2, popcnt, avx, avx2, aes, clmul, erms, 3dnowpref, lzcnt, ht, tsc, tscinvbit, bmi1, bmi2, adx
+
+Memory: 4k page, physical 16461136k(6299588k free), swap 18601656k(2341492k free)
+
+vm_info: OpenJDK 64-Bit Server VM (25.362-b09) for windows-amd64 JRE (1.8.0_362-b09), built on Jan 18 2023 17:11:58 by "jenkins" with MS VC++ 15.9 (VS2017)
+
+time: Mon Aug 14 22:13:45 2023
+timezone: Pacific Daylight Time
+elapsed time: 0.248946 seconds (0d 0h 0m 0s)
+

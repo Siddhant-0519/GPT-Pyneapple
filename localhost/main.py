@@ -8,6 +8,7 @@ from fastapi import FastAPI, Depends
 from read_shapefile import read_shapefile
 from Pyneapple.pyneapple.weight.rook import from_dataframe as rook
 from Pyneapple.pyneapple.regionalization.expressive_maxp import expressive_maxp
+from Pyneapple.pyneapple.regionalization.MaxP import maxp
 from Pyneapple.pyneapple.regionalization.generalized_p import generalized_p
 import uvicorn
 import json
@@ -21,6 +22,7 @@ from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from typing import List
 from pydantic import BaseModel
+import math
 
 app = FastAPI()
 
@@ -43,91 +45,85 @@ data_dir = "D:/user_pa1n/VSCode/projects/GPT-Pyneapple/testData"
 
 function_descriptions = [
             {
-                "name": "emp",
-                "description": "Clustering a set of geographic areas into the maximum number of homogeneous regions that satisfies a set of user defined constraints. ",
+                "name": "maxp",
+                "description": "Clustering a set of geographic areas into the maximum number of homogeneous regions that satisfies a set of user defined constraints. The number of regions to partition is determined by the parameters and conditions.",
                 "parameters": {
                     "type": "object",
                     "properties": {
-                        "location": {
-                            "type": "string",
-                            "description": "The city and state, e.g. San Francisco, CA",
-                        },
+                        
                         "sumName": {
                             "type": "string",
-                            "description": "The name of the spatial extensive attribute variable for the SUM constraint",
+                            "description": "The name of the spatial extensive attribute variable for the SUM constraint, usually the central component parameter to fetermine the regionalization.",
                             #"enum": ["pop2010", "pop_16up"]
                         },
                         "sumLow": {
                             "type": "integer",
-                            "descripition": "The lowerbound for the SUM range"
+                            "descripition": "The lowerbound for the SUM range."
+                            
                         },
                         "sumHigh": {
                             "type": "integer",
-                            "descripition": "The upperbound for the SUM range"
+                            "descripition": "The upperbound for the SUM range."
                         },
                         "disname": {
                             "type": "string",
                             "descripition": "The dissimlarity attribute"
                         },
-                        # "minName": {
-                        #     "type": "string",
-                        #     "descripition": " The name of the spatial extensive attribute variable for the MIN constraint"
-                        # },
-                        # "minLow": {
-                        #     "type": "integer",
-                        #     "descripition": " The lowerbound for the MIN range"
-                        # },
-                        # "minHigh": {
-                        #     "type": "integer",
-                        #     "descripition": " The upperbound for the MIN range"
-                        # },
-                        # "maxName": {
-                        #     "type": "string",
-                        #     "descripition": " The name of the spatial extensive attribute variable for the MAX constraint"
-                        # },
-                        # "maxLow": {
-                        #     "type": "integer",
-                        #     "descripition": " The lowerbound for the MAX range"
-                        # },
-                        # "maxHigh": {
-                        #     "type": "integer",
-                        #     "descripition": " The upperbound for the MAX range"
-                        # },
-                        # "avgName": {
-                        #     "type": "string",
-                        #     "descripition": "The name of the spatial extensive attribute variable for the AVG constraint"
-                        # },
-                        # "avgLow": {
-                        #     "type": "integer",
-                        #     "descripition": "The lowerbound for the AVG range."
-                        # },
-                        # "avgHigh": {
-                        #     "type": "integer",
-                        #     "descripition": "The upperbound for the AVG range."
-                        # },
-                        # "countLow": {
-                        #     "type": "integer",
-                        #     "descripition": "The lowerbound for the COUNT range."
-                        # },
-                        # "countHigh": {
-                        #     "type": "integer",
-                        #     "descripition": "The upperbound for the COUNT range."
-                        # },
+                        "minName": {
+                            "type": "string",
+                            "descripition": " The name of the spatial extensive attribute variable for the MIN constraint"
+                        },
+                        "minLow": {
+                            "type": "integer",
+                            "descripition": " The lowerbound for the MIN range"
+                        },
+                        "minHigh": {
+                            "type": "integer",
+                            "descripition": " The upperbound for the MIN range"
+                        },
+                        "maxName": {
+                            "type": "string",
+                            "descripition": " The name of the spatial extensive attribute variable for the MAX constraint"
+                        },
+                        "maxLow": {
+                            "type": "integer",
+                            "descripition": " The lowerbound for the MAX range"
+                        },
+                        "maxHigh": {
+                            "type": "integer",
+                            "descripition": " The upperbound for the MAX range"
+                        },
+                        "avgName": {
+                            "type": "string",
+                            "descripition": "The name of the spatial extensive attribute variable for the AVG constraint"
+                        },
+                        "avgLow": {
+                            "type": "integer",
+                            "descripition": "The lowerbound for the AVG range."
+                        },
+                        "avgHigh": {
+                            "type": "integer",
+                            "descripition": "The upperbound for the AVG range."
+                        },
+                        "countLow": {
+                            "type": "integer",
+                            "descripition": "The lowerbound for the COUNT range."
+                        },
+                        "countHigh": {
+                            "type": "integer",
+                            "descripition": "The upperbound for the COUNT range."
+                        },
 
                     },
-                    "required": ["location", "sumName", "sumLow", "sumHigh", "disname"],
+                    "required": ["disname", "sumName", "sumLow", "sumHigh"],
                 },
             },
             {
                 "name": "generalized_p",
-                "description": "Clustering a set of geographic areas into the fixed given number of homogeneous regions based on one constraint and one optimization parameter",
+                "description": "Clustering a set of geographic areas into the fixed given number of homogeneous regions based on one constraint and one optimization parameter. Only used when the number of regions to partition the given dataset is mentioned in the user query. ",
                 "parameters": {
                     "type": "object",
                     "properties": {
-                        "location": {
-                            "type": "string",
-                            "description": "The city and state, e.g. San Francisco, CA",
-                        },
                         "sim_attr": {
                             "type": "string",
                             "description": "The name of the attribute to measure the heterogeneity used for optimization",
@@ -146,7 +142,7 @@ function_descriptions = [
                             "description": "The pre-defined number of regions",    
                         },
                     },
-                    "required": ["location", "sim_attr", "ext_attr", "threshold", "p"],
+                    "required": ["sim_attr", "ext_attr", "threshold", "p"],
                 },
             },
 
@@ -164,8 +160,9 @@ def gpt_process_query(user_query: str, file_name: str):
 
     chat_history = []
     chat_history.append({"role": "system","content": "You are a helpful assistant"})
-    chat_history.append({"role": "user","content": "Based on the name  of the columns of the  dataframe help select appropiate column as paramters for functions based on the user query"})
+    chat_history.append({"role": "user","content": "Based on the name of the columns of the  dataframe help select appropiate column as arguments for functions based on the user query. Give a detailed analysis of inference of each column name"})
     chat_history.append({"role": "user", "content": "The columns in the dataframe are : " + df_context})
+    chat_history.append({"role": "system", "content": "The function is case sensitive so for arguments return exact names of the columns as parameters."})
     print(len(chat_history))
 
     Initialresponse = openai.ChatCompletion.create(
@@ -177,26 +174,38 @@ def gpt_process_query(user_query: str, file_name: str):
     )
     print(Initialresponse["choices"][0]["message"])
     chat_history.append(Initialresponse["choices"][0]["message"])
+    chat_history.append({"role": "system", "content": "Default values for lower bound parameters is negative infinty and upper bound is infintiy. Only use ',' as a delimeter for larger integers"})
+    
 
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo-16k-0613",
 
         # This is the chat message from the user
-        messages= chat_history + [{"role": "user", "content": "Given the user query : " + user_query + "respond with the function call. Make sure the arguments are exactly case matching to a string from df_context and none of them are geological coordinates based or string literals . Convert any integer value to a double in the arguments"}],
-
+        messages = chat_history + [{"role": "system", "content": "Next respond only with an appropiate function call where arguments match a certain column name for the given the user query : " + user_query}],
 
         functions=function_descriptions,
         function_call="auto",
     )
 
     ai_response_message = response["choices"][0]["message"]
+    print(ai_response_message)
     callingFunction = ai_response_message['function_call']['name']
-    parameters = json.loads(ai_response_message["function_call"]["arguments"])
     print("Calling Function is : ", callingFunction)
+    parameters = json.loads(ai_response_message["function_call"]["arguments"].replace("_",""))
     print("Parameters chosen by GPT are : ", parameters)
 
-    if callingFunction == "emp":
-        function_response = GPTempEndPoint(parameters, file_name)
+    refined_response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo-16k-0613",
+
+        # This is the chat message from the user
+        messages=[{"role": "system", "content": "Based on the conditions, convert and return as a dictionary: " + ai_response_message["function_call"]["arguments"] + "Conditions: Integer values should only be seperated by ',' as a delimeter. String values must exactly match a certain column from given column names: "+ df_context}],
+    )
+    print("Refined Response: ",refined_response["choices"][0]["message"])
+    parameters = json.loads(refined_response["choices"][0]["message"]["content"])
+    print("refined parameters: ", parameters)
+
+    if callingFunction == "maxp":
+        function_response = GPTmaxPEndPoint(parameters, file_name)
         function_response_data = json.loads(function_response)
         plotLabels = function_response_data['labels']
         print(type(plotLabels))
@@ -238,7 +247,7 @@ async def list_files():
 
 
 @app.post("/api/endpoint")
-def GPTempEndPoint(parameters: Dict[str, Union[float, str]], filename: str):
+def GPTmaxPEndPoint(parameters: Dict[str, Union[float, str]], filename: str):
 
     # location = parameters['location']
     # if location == 'Los Angeles, CA':
@@ -248,40 +257,41 @@ def GPTempEndPoint(parameters: Dict[str, Union[float, str]], filename: str):
     w = rook(df)
 
     parameters_required = {
-        "disname": "pop_16up",
-        "minName": "pop_16up",
-        "minLow": 0.0,
-        "minHigh": 999999.0,
-        "maxName": "pop_16up",
-        "maxLow": 0.0,
-        "maxHigh": 999999.0,
-        "avgName": "pop_16up",
-        "avgLow": 0.0,
-        "avgHigh": 999999.0,
-        "sumName": "pop_16up",
-        "sumLow": 0.0,
-        "sumHigh": 999999.0,
-        "countLow": 0.0,
-        "countHigh": 999999.0,
+        "disname": None,
+        "minName": None,
+        "minLow": -math.inf,
+        "minHigh": math.inf,
+        "maxName": None,
+        "maxLow": -math.inf,
+        "maxHigh": math.inf,
+        "avgName": None,
+        "avgLow": -math.inf,
+        "avgHigh": math.inf,
+        "sumName": None,
+        "sumLow": -math.inf,
+        "sumHigh": math.inf,
+        "countLow": -math.inf,
+        "countHigh": math.inf,
     }
 
     for param in parameters_required:
         if param in parameters:
             parameters_required[param] = parameters[param]
 
-    # print(parameters_required)
+    print(parameters_required)
     # print(type(df),     type(w), type(parameters_required), type(parameters_required['disname']))
-    max_p, labels = expressive_maxp(df, w, parameters_required["disname"],
-                                    parameters_required["minName"],
-                                    parameters_required["minLow"], parameters_required["minHigh"],
-                                    parameters_required["maxName"],
-                                    parameters_required["maxLow"], parameters_required["maxHigh"],
-                                    parameters_required["avgName"],
-                                    parameters_required["avgLow"], parameters_required["avgHigh"],
-                                    parameters_required["sumName"],
-                                    parameters_required["sumLow"], parameters_required["sumHigh"],
-                                    parameters_required["countLow"], parameters_required["countHigh"])
-    labels = labels.tolist()
+    max_p, labels = maxp(df, w, parameters_required["disname"], 
+                         parameters_required["sumName"],
+                         parameters_required["sumLow"], parameters_required["sumHigh"],
+                         parameters_required["minName"],
+                         parameters_required["minLow"], parameters_required["minHigh"],
+                         parameters_required["maxName"],
+                         parameters_required["maxLow"], parameters_required["maxHigh"],
+                         parameters_required["avgName"],
+                         parameters_required["avgLow"], parameters_required["avgHigh"],
+                         parameters_required["countLow"], parameters_required["countHigh"])
+    # print("Maxp:", max_p, "labels", labels)
+    # labels = labels.tolist()
     empResult = {"max_p": max_p, "labels": labels}
     jsonEmpRes = json.dumps(empResult)
     return jsonEmpRes
