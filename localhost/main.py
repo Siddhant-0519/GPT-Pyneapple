@@ -148,40 +148,101 @@ function_descriptions = [
 
         ]
 
+DESCRIPTIONS_JSON = '../testdata/descriptions.json'
+
+def generate_column_descriptions(df_context: str) -> dict:
+    # Here, you call GPT-3 API to generate a detailed description for columns
+    chat_history = [
+        {"role": "system", "content": "You are a helpful assistant"},
+        {"role": "user", "content": "Describe each of the following dataframe columns in detail: " + df_context}
+    ]
+
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo-16k-0613",
+        messages=chat_history
+    )
+
+    detailed_description = response["choices"][0]["message"]["content"]
+    return detailed_description
+
+
+@app.get("/gpt_end_point/generate_description")
+def generate_description(file_name: str) -> dict:
+    # If the descriptions file exists, load it
+    if os.path.exists(DESCRIPTIONS_JSON):
+        with open(DESCRIPTIONS_JSON, 'r') as f:
+            descriptions = json.load(f)
+    else:
+        descriptions = {}
+
+    # If the description already exists, return it
+    if file_name in descriptions:
+        return {"status": "exists", "description": descriptions[file_name]}
+
+    df = read_shapefile(data_dir, file_name)
+    filtered_columns = [col for col in df.columns if col not in ['geometry', 'OBJECTID', 'GEOID10']]
+    df_context = str(filtered_columns)
+
+    # Generate detailed descriptions for the columnsb 
+    column_descriptions = generate_column_descriptions(df_context)
+
+    descriptions[file_name] = column_descriptions
+
+    # Save the updated descriptions
+    with open(DESCRIPTIONS_JSON, 'w') as f:
+        json.dump(descriptions, f)
+
+    return {"status": "created", "description": column_descriptions}
+
+
+
+def get_description(file_name: str) -> str:
+    with open(DESCRIPTIONS_JSON, 'r') as f:
+        descriptions = json.load(f)
+        
+    return descriptions.get(file_name, "")
+
 
 @app.get("/gpt_end_point/process_query")
 def gpt_process_query(user_query: str, file_name: str):
 
-    print(file_name)
-    df = read_shapefile(data_dir, file_name)
-    filtered_columns = [col for col in df.columns if col not in ['geometry', 'OBJECTID', 'GEOID10']]
-    df_context = str(filtered_columns)
+    # print(file_name)
+    # df = read_shapefile(data_dir, file_name)
+    # filtered_columns = [col for col in df.columns if col not in ['geometry', 'OBJECTID', 'GEOID10']]
+    # df_context = str(filtered_columns)
+    # print(df_context)
+
+    df_context = get_description(file_name)
+    
+    # If no description exists, it means it hasn't been generated before. 
+    if not df_context:
+        return {"error": "Description not found for the given file_name"}
     print(df_context)
 
     chat_history = []
-    chat_history.append({"role": "system","content": "You are a helpful assistant"})
-    chat_history.append({"role": "user","content": "Based on the name of the columns of the  dataframe help select appropiate column as arguments for functions based on the user query. Give a detailed analysis of inference of each column name"})
-    chat_history.append({"role": "user", "content": "The columns in the dataframe are : " + df_context})
-    chat_history.append({"role": "system", "content": "The function is case sensitive so for arguments return exact names of the columns as parameters."})
-    print(len(chat_history))
+    chat_history.append({"role": "system","content": "Only choose from the functions provided to you. Default values for lower bound parameters is negative infinty and upper bound is infintiy. Only use ',' as a delimeter for larger integers"})
+    # chat_history.append({"role": "user","content": "Based on the name of the columns of the  dataframe help select appropiate column as arguments for functions based on the user query. Give a detailed analysis of inference of each column name"})
+    # chat_history.append({"role": "user", "content": "The columns in the dataframe are : " + df_context})
+    # chat_history.append({"role": "system", "content": "The function is case sensitive so for arguments return exact names of the columns as parameters."})
+    # print(len(chat_history))
 
-    Initialresponse = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo-16k-0613",
+    # Initialresponse = openai.ChatCompletion.create(
+    #     model="gpt-3.5-turbo-16k-0613",
 
-        # This is the chat message from the user
-        messages=chat_history
+    #     # This is the chat message from the user
+    #     messages=chat_history
 
-    )
-    print(Initialresponse["choices"][0]["message"])
-    chat_history.append(Initialresponse["choices"][0]["message"])
-    chat_history.append({"role": "system", "content": "Default values for lower bound parameters is negative infinty and upper bound is infintiy. Only use ',' as a delimeter for larger integers"})
+    # )
+    # print(Initialresponse["choices"][0]["message"])
+    # chat_history.append(Initialresponse["choices"][0]["message"])
+    # chat_history.append({"role": "system", "content": "Default values for lower bound parameters is negative infinty and upper bound is infintiy. Only use ',' as a delimeter for larger integers"})
     
 
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo-16k-0613",
 
         # This is the chat message from the user
-        messages = chat_history + [{"role": "system", "content": "Next respond only with an appropiate function call where arguments match a certain column name for the given the user query : " + user_query}],
+        messages = chat_history + [{"role": "user", "content": "Respond with an appropiate function call where arguments match a certain column name for the given the user query : " + user_query + "given the column description: " + df_context}],
 
         functions=function_descriptions,
         function_call="auto",
@@ -191,7 +252,7 @@ def gpt_process_query(user_query: str, file_name: str):
     print(ai_response_message)
     callingFunction = ai_response_message['function_call']['name']
     print("Calling Function is : ", callingFunction)
-    parameters = json.loads(ai_response_message["function_call"]["arguments"].replace("_",""))
+    parameters = json.loads(ai_response_message["function_call"]["arguments"].replace("_", ""))
     print("Parameters chosen by GPT are : ", parameters)
 
     refined_response = openai.ChatCompletion.create(
