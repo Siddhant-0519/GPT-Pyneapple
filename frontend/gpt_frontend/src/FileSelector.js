@@ -34,6 +34,13 @@ const FileSelector = ({ setGeoJSON, setLabels, setColorMap}) => {
         setLabels([]); // Reset labels
         setColorMap({}); // Reset colorMap
         console.log('GeoJSON data set:', response.data); // Log the data set to geoJSON
+
+        axios.get(`http://localhost:8000/gpt_end_point/generate_description/${selectedFile}`)
+        .then(descResponse => {
+          console.log('Description Status:', descResponse.data.status);
+          // Optionally, you can set the description in a state or show it in the UI
+        })
+        .catch(error => console.error('Error fetching description:', error));
       })
       .catch(error => console.error('Error fetching file data:', error));
 };

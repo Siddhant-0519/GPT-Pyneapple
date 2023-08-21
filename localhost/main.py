@@ -23,6 +23,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from typing import List
 from pydantic import BaseModel
 import math
+import numpy as np
 
 app = FastAPI()
 
@@ -166,7 +167,7 @@ def generate_column_descriptions(df_context: str) -> dict:
     return detailed_description
 
 
-@app.get("/gpt_end_point/generate_description")
+@app.get("/gpt_end_point/generate_description/{file_name}")
 def generate_description(file_name: str) -> dict:
     # If the descriptions file exists, load it
     if os.path.exists(DESCRIPTIONS_JSON):
@@ -209,7 +210,7 @@ def gpt_process_query(user_query: str, file_name: str):
     # print(file_name)
     # df = read_shapefile(data_dir, file_name)
     # filtered_columns = [col for col in df.columns if col not in ['geometry', 'OBJECTID', 'GEOID10']]
-    # df_context = str(filtered_columns)
+    # df_cols = str(filtered_columns)
     # print(df_context)
 
     df_context = get_description(file_name)
@@ -217,10 +218,12 @@ def gpt_process_query(user_query: str, file_name: str):
     # If no description exists, it means it hasn't been generated before. 
     if not df_context:
         return {"error": "Description not found for the given file_name"}
-    print(df_context)
+    print("File description: ", df_context)
 
     chat_history = []
     chat_history.append({"role": "system","content": "Only choose from the functions provided to you. Default values for lower bound parameters is negative infinty and upper bound is infintiy. Only use ',' as a delimeter for larger integers"})
+    chat_history.append({"role": "system", "content": "Function generalized_p is chosen if the number of regions to partition the dataset is mentioned by the user. If the nu,ber of regions/partitions are not mentioned you should choose the function maxp"})
+    chat_history.append({"role": "system", "content": "Make sure to choose the required string parameters for each function."})
     # chat_history.append({"role": "user","content": "Based on the name of the columns of the  dataframe help select appropiate column as arguments for functions based on the user query. Give a detailed analysis of inference of each column name"})
     # chat_history.append({"role": "user", "content": "The columns in the dataframe are : " + df_context})
     # chat_history.append({"role": "system", "content": "The function is case sensitive so for arguments return exact names of the columns as parameters."})
@@ -249,21 +252,65 @@ def gpt_process_query(user_query: str, file_name: str):
     )
 
     ai_response_message = response["choices"][0]["message"]
-    print(ai_response_message)
-    callingFunction = ai_response_message['function_call']['name']
-    print("Calling Function is : ", callingFunction)
-    parameters = json.loads(ai_response_message["function_call"]["arguments"].replace("_", ""))
-    print("Parameters chosen by GPT are : ", parameters)
+    print("Initial response Message: ", ai_response_message)
+    # print("Debug: ", ai_response_message.keys())
+    # if "function_call" not in ai_response_message:
+    #     print("Debug: ")
+    #     #print(ai_response_message.keys())
 
-    refined_response = openai.ChatCompletion.create(
+    if "function_call" in ai_response_message:
+        callingFunction = ai_response_message['function_call']['name']
+        print("Calling Function is : ", callingFunction)
+        parameters = json.loads(ai_response_message["function_call"]["arguments"])
+        print("Parameters chosen by GPT are : ", parameters)
+    else:
+        print("In the validation function")
+        validate_function_call = openai.ChatCompletion.create(
         model="gpt-3.5-turbo-16k-0613",
 
         # This is the chat message from the user
-        messages=[{"role": "system", "content": "Based on the conditions, convert and return as a dictionary: " + ai_response_message["function_call"]["arguments"] + "Conditions: Integer values should only be seperated by ',' as a delimeter. String values must exactly match a certain column from given column names: "+ df_context}],
-    )
-    print("Refined Response: ",refined_response["choices"][0]["message"])
-    parameters = json.loads(refined_response["choices"][0]["message"]["content"])
-    print("refined parameters: ", parameters)
+        messages=[{"role": "user", "content": "Respond only with the filled dictionary {'calling_function': , 'arguments': {} } based on the response " + ai_response_message["content"] + "available function names are either maxp or generalized_p"}],
+        # functions=function_descriptions,
+        # function_call="none",
+        )
+
+        validate_function_response = validate_function_call["choices"][0]["message"]
+        print("Validation Response: ", validate_function_response)
+
+        # Convert the 'content' string to a dictionary
+        fixed_json_str = validate_function_response["content"].replace("'", "\"")
+        content_dict = json.loads(fixed_json_str)
+        print("Content dictionary: ", content_dict)
+
+        # Extract the values from the dictionary
+        callingFunction = content_dict["calling_function"]
+        print("Validated function call: ", callingFunction)
+
+        # Assuming you want to replace underscores from keys in the 'arguments' dictionary
+        parameters = content_dict["arguments"]
+        print("Parameters chosen by function validator: ", parameters)
+        # print(str(parameters))
+
+    # refined_response = openai.ChatCompletion.create(
+    #     model="gpt-3.5-turbo-16k-0613",
+
+    #     # This is the chat message from the user
+    #     messages=[{"role": "user", "content": "Based on the conditions, Validate and only return the dictonary: " + str(parameters) + "Conditions: Integer values should only be seperated by ',' as a delimeter. String values must exactly match a certain column from given column names: " + df_cols}],
+    # )
+    # print("Refined Response: ",refined_response["choices"][0]["message"])
+    # parameters = json.loads(refined_response["choices"][0]["message"]["content"])
+    # print("refined parameters: ", parameters)
+
+## Validate Parameterrs generated
+    # validate_parameters = openai.ChatCompletion.create(
+    #     model="gpt-3.5-turbo-16k-0613",
+
+    #     # This is the chat message from the user
+    #     messages=[{"role": "user", "content": "Only return the validated dictionary where if the value is a string should match a column from " + df_cols+ "and if an integer should be seperated using a ','. Dictionary to validate is: " + str(parameters)}],
+    # )
+
+    # validate_parameters_response = validate_parameters["choices"][0]["message"]
+    # print("Validated parameters: ", validate_parameters_response)
 
     if callingFunction == "maxp":
         function_response = GPTmaxPEndPoint(parameters, file_name)
@@ -286,7 +333,6 @@ def gpt_process_query(user_query: str, file_name: str):
     gptResult = {"gptResponse": evaluate_function_response['choices'][0]['message']['content'], "plot": function_response}
     print(gptResult)
     return gptResult
-
 
 
 @app.get("/files/{filename}")
@@ -339,6 +385,9 @@ def GPTmaxPEndPoint(parameters: Dict[str, Union[float, str]], filename: str):
         if param in parameters:
             parameters_required[param] = parameters[param]
 
+    for key, value in parameters_required.items():
+        if isinstance(value, (int, float)):
+            parameters_required[key] = jpype.JDouble(value)
     print(parameters_required)
     # print(type(df),     type(w), type(parameters_required), type(parameters_required['disname']))
     max_p, labels = maxp(df, w, parameters_required["disname"], 
@@ -354,6 +403,9 @@ def GPTmaxPEndPoint(parameters: Dict[str, Union[float, str]], filename: str):
     # print("Maxp:", max_p, "labels", labels)
     # labels = labels.tolist()
     empResult = {"max_p": max_p, "labels": labels}
+    if isinstance(empResult, np.ndarray):
+        empResult = empResult.tolist()
+
     jsonEmpRes = json.dumps(empResult)
     return jsonEmpRes
 
@@ -376,6 +428,7 @@ def gpEndPoint(parameters: Dict[str, Union[int, float, str]], filename: str):
 
     print(parameters_required)
     prucLabels = generalized_p(df, w, parameters_required["sim_attr"], parameters_required["ext_attr"], parameters_required["threshold"], parameters_required["p"])
+    print("generalized_p result: ", prucLabels)
     prucResult = {"heterogenity_score:": prucLabels[0], "labels": prucLabels[1]}
     jsonPrucResult = json.dumps(prucResult)
 
