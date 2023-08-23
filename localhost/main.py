@@ -402,10 +402,12 @@ def GPTmaxPEndPoint(parameters: Dict[str, Union[float, str]], filename: str):
                          parameters_required["countLow"], parameters_required["countHigh"])
     # print("Maxp:", max_p, "labels", labels)
     # labels = labels.tolist()
+    
+    print("Maxp function result: ", max_p, labels)
+    if isinstance(labels, np.ndarray):
+        labels = labels.tolist()
+    
     empResult = {"max_p": max_p, "labels": labels}
-    if isinstance(empResult, np.ndarray):
-        empResult = empResult.tolist()
-
     jsonEmpRes = json.dumps(empResult)
     return jsonEmpRes
 
