@@ -48,9 +48,6 @@ openai.api_key = os.getenv('OPENAI_API_KEY')
 data_dir = "../testData"
 
 
-# class Label(BaseModel):
-#     labels = List[int]
-
 function_descriptions = [
             {
                 "name": "maxp",
@@ -157,6 +154,7 @@ function_descriptions = [
         ]
 
 DESCRIPTIONS_JSON = '../testdata/descriptions.json'
+
 
 def generate_column_descriptions(df_context: str) -> dict:
     # Here, you call GPT-3 API to generate a detailed description for columns
@@ -318,16 +316,24 @@ def gpt_process_query(user_query: str, file_name: str):
 
     # validate_parameters_response = validate_parameters["choices"][0]["message"]
     # print("Validated parameters: ", validate_parameters_response)
+    try:
+        if callingFunction == "maxp":
+            function_response = GPTmaxPEndPoint(parameters, file_name)
+            function_response_data = json.loads(function_response)
+            plotLabels = function_response_data['labels']
+            print(type(plotLabels))
 
-    if callingFunction == "maxp":
-        function_response = GPTmaxPEndPoint(parameters, file_name)
-        function_response_data = json.loads(function_response)
-        plotLabels = function_response_data['labels']
-        print(type(plotLabels))
+        elif callingFunction == "generalized_p":
+            function_response = gpEndPoint(parameters, file_name)
+            function_response_data = json.loads(function_response)
 
-    elif callingFunction == "generalized_p":
-        function_response = gpEndPoint(parameters, file_name)
-        function_response_data = json.loads(function_response)
+    except Exception as e:
+        # Handle the exception
+        error_message = str(e)
+        print("Error: ", error_message)
+        gptResult = {"gptResponse": "An error occurred: " + error_message + ". Please try again.", "plot": '[]'}
+        print(gptResult)
+        return gptResult
 
     evaluate_function_response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo-16k-0613",

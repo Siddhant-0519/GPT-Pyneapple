@@ -32,9 +32,9 @@ const QueryInput = ({ onQuerySubmit, OnLabelsReceived }) => {
 
     if (response.ok) {
       const data = await response.json();
-      console.log(data)
+      console.log("Backend response: ",data)
       const plotData = JSON.parse(data.plot);
-      console.log(plotData.labels)
+      console.log("Backend plot data: ",plotData.labels)
       OnLabelsReceived && OnLabelsReceived(plotData.labels);
       setConversation(prev => [...prev, { text: "YOU: " + query, type: 'user' }, { text: "AI: " + data.gptResponse, type: 'ai' }]);
       setQuery(""); // Clear the query after it has been submitted

@@ -28,6 +28,9 @@ const createColorMap = (labels) => {
 let featureCounter = 0;
 
 const styleFeature = (feature, labels, colorMap) => {
+  if (!labels || labels.length === 0) {
+    return { fillColor: 'transparent', fillOpacity: 0.6, weight: 2, opacity: 1, color: 'black', dashArray: '3' };
+  }
   const featureLabel = labels[featureCounter]; // Adjust YOUR_UNIQUE_ID_FIELD to whatever unique field identifies each feature
   featureCounter++;
           return {
@@ -58,7 +61,8 @@ function GeoJSONLayer({ data, labels, colorMap }) {
       featureCounter = 0;
       // If there is a previous layer, remove it
       if (layerRef.current) {
-        layerRef.current.remove();
+        // layerRef.current.remove();
+        map.removeLayer(layerRef.current);
       }
 
       // Create the new layer
@@ -79,7 +83,7 @@ function GeoJSONLayer({ data, labels, colorMap }) {
   }, [data, map, colorMap, labels]);
 
   
-  return data ? <GeoJSON data={data} /> : null;
+  // return data ? <GeoJSON data={data} /> : null;
 }
 
 const MapComponent = () => {
