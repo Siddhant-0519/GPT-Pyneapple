@@ -1,6 +1,8 @@
+# imports
 import sys
 import os
 
+# Set root directory
 project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, project_root)
 
@@ -29,10 +31,10 @@ from libpysal.weights import Queen, Rook
 from spopt.region.maxp import maxp as libMaxP
 import time
 
-
+# Initialize fastAPI app
 app = FastAPI()
 
-# Add CORS middleware
+# Add CORS middleware ( Allow access to backend endpoints)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:3000", "http://localhost:3001"],  # Allows CORS from this origin
@@ -43,11 +45,14 @@ app.add_middleware(
 
 # GPT-Backend
 
+# Import openAI API key for using GPT
 openai.api_key = os.getenv('OPENAI_API_KEY')
 # print(openai.api_key)
+
+# Define Data directory
 data_dir = "../testData"
 
-
+# Define functions which GPT API can call and details
 function_descriptions = [
             {
                 "name": "maxp",
@@ -153,9 +158,11 @@ function_descriptions = [
 
         ]
 
+# Path for storing shapefile descriptions
 DESCRIPTIONS_JSON = '../testdata/descriptions.json'
 
 
+# Function to use GPT to generate column description
 def generate_column_descriptions(df_context: str) -> dict:
     # Here, you call GPT-3 API to generate a detailed description for columns
     chat_history = [
@@ -172,6 +179,7 @@ def generate_column_descriptions(df_context: str) -> dict:
     return detailed_description
 
 
+# End point to generate the column description everytime a file is loaded
 @app.get("/gpt_end_point/generate_description/{file_name}")
 def generate_description(file_name: str) -> dict:
     # If the descriptions file exists, load it
@@ -201,22 +209,18 @@ def generate_description(file_name: str) -> dict:
     return {"status": "created", "description": column_descriptions}
 
 
-
+# Function to retrieve column description
 def get_description(file_name: str) -> str:
     with open(DESCRIPTIONS_JSON, 'r') as f:
         descriptions = json.load(f)
         
     return descriptions.get(file_name, "")
 
+# Endpoint to call GPT workflow to process user query
+
 
 @app.get("/gpt_end_point/process_query")
 def gpt_process_query(user_query: str, file_name: str):
-
-    # print(file_name)
-    # df = read_shapefile(data_dir, file_name)
-    # filtered_columns = [col for col in df.columns if col not in ['geometry', 'OBJECTID', 'GEOID10']]
-    # df_cols = str(filtered_columns)
-    # print(df_context)
 
     df_context = get_description(file_name)
     
@@ -229,23 +233,7 @@ def gpt_process_query(user_query: str, file_name: str):
     chat_history.append({"role": "system","content": "Only choose from the functions provided to you. Default values for lower bound parameters is negative infinty and upper bound is infintiy. Only use ',' as a delimeter for larger integers"})
     chat_history.append({"role": "system", "content": "Function generalized_p is chosen if the number of regions to partition the dataset is mentioned by the user. If the number of regions/partitions are not mentioned you should choose the function maxp"})
     chat_history.append({"role": "system", "content": "Make sure to choose the required string parameters for each function."})
-    # chat_history.append({"role": "user","content": "Based on the name of the columns of the  dataframe help select appropiate column as arguments for functions based on the user query. Give a detailed analysis of inference of each column name"})
-    # chat_history.append({"role": "user", "content": "The columns in the dataframe are : " + df_context})
-    # chat_history.append({"role": "system", "content": "The function is case sensitive so for arguments return exact names of the columns as parameters."})
-    # print(len(chat_history))
-
-    # Initialresponse = openai.ChatCompletion.create(
-    #     model="gpt-3.5-turbo-16k-0613",
-
-    #     # This is the chat message from the user
-    #     messages=chat_history
-
-    # )
-    # print(Initialresponse["choices"][0]["message"])
-    # chat_history.append(Initialresponse["choices"][0]["message"])
-    # chat_history.append({"role": "system", "content": "Default values for lower bound parameters is negative infinty and upper bound is infintiy. Only use ',' as a delimeter for larger integers"})
     
-
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo-16k-0613",
 
@@ -258,11 +246,7 @@ def gpt_process_query(user_query: str, file_name: str):
 
     ai_response_message = response["choices"][0]["message"]
     print("Initial response Message: ", ai_response_message)
-    # print("Debug: ", ai_response_message.keys())
-    # if "function_call" not in ai_response_message:
-    #     print("Debug: ")
-    #     #print(ai_response_message.keys())
-
+   
     if "function_call" in ai_response_message:
         callingFunction = ai_response_message['function_call']['name']
         print("Calling Function is : ", callingFunction)
@@ -271,12 +255,10 @@ def gpt_process_query(user_query: str, file_name: str):
     else:
         print("In the validation function")
         validate_function_call = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo-16k-0613",
-
-        # This is the chat message from the user
-        messages=[{"role": "user", "content": "Respond only with the filled dictionary {'calling_function': , 'arguments': {} } based on the response " + ai_response_message["content"] + "available function names are either maxp or generalized_p"}],
-        # functions=function_descriptions,
-        # function_call="none",
+            model="gpt-3.5-turbo-16k-0613",
+            # This is the chat message from the user
+            messages=[{"role": "user", "content": "Respond only with the filled dictionary {'calling_function': , 'arguments': {} } based on the response " + ai_response_message["content"] + "available function names are either maxp or generalized_p"}],
+            
         )
 
         validate_function_response = validate_function_call["choices"][0]["message"]
@@ -291,31 +273,10 @@ def gpt_process_query(user_query: str, file_name: str):
         callingFunction = content_dict["calling_function"]
         print("Validated function call: ", callingFunction)
 
-        # Assuming you want to replace underscores from keys in the 'arguments' dictionary
         parameters = content_dict["arguments"]
         print("Parameters chosen by function validator: ", parameters)
         # print(str(parameters))
 
-    # refined_response = openai.ChatCompletion.create(
-    #     model="gpt-3.5-turbo-16k-0613",
-
-    #     # This is the chat message from the user
-    #     messages=[{"role": "user", "content": "Based on the conditions, Validate and only return the dictonary: " + str(parameters) + "Conditions: Integer values should only be seperated by ',' as a delimeter. String values must exactly match a certain column from given column names: " + df_cols}],
-    # )
-    # print("Refined Response: ",refined_response["choices"][0]["message"])
-    # parameters = json.loads(refined_response["choices"][0]["message"]["content"])
-    # print("refined parameters: ", parameters)
-
-## Validate Parameterrs generated
-    # validate_parameters = openai.ChatCompletion.create(
-    #     model="gpt-3.5-turbo-16k-0613",
-
-    #     # This is the chat message from the user
-    #     messages=[{"role": "user", "content": "Only return the validated dictionary where if the value is a string should match a column from " + df_cols+ "and if an integer should be seperated using a ','. Dictionary to validate is: " + str(parameters)}],
-    # )
-
-    # validate_parameters_response = validate_parameters["choices"][0]["message"]
-    # print("Validated parameters: ", validate_parameters_response)
     try:
         if callingFunction == "maxp":
             function_response = GPTmaxPEndPoint(parameters, file_name)
@@ -348,12 +309,9 @@ def gpt_process_query(user_query: str, file_name: str):
     return gptResult
 
 
+# End point for backend maxP function
 @app.post("/api/endpoint")
 def GPTmaxPEndPoint(parameters: Dict[str, Union[float, str]], filename: str):
-
-    # location = parameters['location']
-    # if location == 'Los Angeles, CA':
-    # filename = "LACity.shp"
 
     df = read_shapefile(data_dir, filename)
     w = rook(df)
@@ -384,7 +342,7 @@ def GPTmaxPEndPoint(parameters: Dict[str, Union[float, str]], filename: str):
         if isinstance(value, (int, float)):
             parameters_required[key] = jpype.JDouble(value)
     print(parameters_required)
-    # print(type(df),     type(w), type(parameters_required), type(parameters_required['disname']))
+
     max_p, labels = maxp(df, w, parameters_required["disname"], 
                          parameters_required["sumName"],
                          parameters_required["sumLow"], parameters_required["sumHigh"],
@@ -395,9 +353,7 @@ def GPTmaxPEndPoint(parameters: Dict[str, Union[float, str]], filename: str):
                          parameters_required["avgName"],
                          parameters_required["avgLow"], parameters_required["avgHigh"],
                          parameters_required["countLow"], parameters_required["countHigh"])
-    # print("Maxp:", max_p, "labels", labels)
-    # labels = labels.tolist()
-    
+
     print("Maxp function result: ", max_p, labels)
     if isinstance(labels, np.ndarray):
         labels = labels.tolist()
@@ -407,6 +363,7 @@ def GPTmaxPEndPoint(parameters: Dict[str, Union[float, str]], filename: str):
     return jsonEmpRes
 
 
+# End point for backend generalizedP function
 @app.post("/api/endpoint/generalizedP")
 def gpEndPoint(parameters: Dict[str, Union[int, float, str]], filename: str):
 
@@ -430,11 +387,12 @@ def gpEndPoint(parameters: Dict[str, Union[int, float, str]], filename: str):
     jsonPrucResult = json.dumps(prucResult)
 
     return jsonPrucResult
-#print(pruc(gdf, w, 'PCGDP1940', 'PERIMETER', 3000000, 10))
+# print(pruc(gdf, w, 'PCGDP1940', 'PERIMETER', 3000000, 10))
 
 
 ## OverLapping end points
 
+# Endpoint to retrieve files for frontend dropdown menu
 @app.get("/listFiles")
 async def list_files():
     files = []
@@ -444,12 +402,14 @@ async def list_files():
     return files
 
 
+# Endpoint for weights dropdown menu
 @app.get("/listWeights")
 async def list_weights():
     weights = ['Queen', 'Rook']
     return weights 
 
 
+# Endpoint for uploading a file and storing it in data directory
 @app.post("/upload")
 async def upload_file(file: UploadFile = File(...)):
     file_name = file.filename
@@ -462,6 +422,7 @@ async def upload_file(file: UploadFile = File(...)):
     return {"Successfully uploaded : ", file_name}
 
 
+# Endpoint to process and send only the geometry for frontend visualization
 @app.get("/files/{filename}")
 async def read_file_fe(filename: str):
     gdf = read_shapefile(data_dir, filename)
@@ -470,9 +431,10 @@ async def read_file_fe(filename: str):
     # print(gdf)
     return json.loads(gdf.to_json())
 
+
 # Pyneapple Backend
 
-
+# Extract valid integer columns and ranges for sliders
 @app.get("/dfDetails")
 async def df_details(filename):
 
@@ -483,6 +445,7 @@ async def df_details(filename):
     return available_cols
 
 
+# Backend expressive maxP endpoint
 @app.get("/api/endpoint/emp")
 def empEndPoint(file_name: str, weight: str, disname: str,
                 minName: str, minLow: float, minHigh: float,
@@ -511,6 +474,7 @@ def empEndPoint(file_name: str, weight: str, disname: str,
     return empResult
 
 
+# Backend generalizedP endpoint
 @app.get("/api/endpoint/generalizedP")
 def gmpEndPoint(file_name: str, weight: str, sim_attr: str, ext_attr: str,
                 threshold: float, p: int):
@@ -531,6 +495,7 @@ def gmpEndPoint(file_name: str, weight: str, sim_attr: str, ext_attr: str,
     return prucResult
 
 
+# Backend library maxP endpoint
 @app.get("/api/endpoint/libraryMaxP")
 def libraryMaxP(file_name: str, weight: str, attr_name: str, threshold_name: str, threshold: float):
 
@@ -550,6 +515,7 @@ def libraryMaxP(file_name: str, weight: str, attr_name: str, threshold_name: str
     return lmpResult
 
 
+# backend scalable maxP endpoint
 @app.get("/api/endpoint/ScalableMaxP")
 def smp(file_name: str, weight: str, sim_attr: str, ext_attr: str, threshold: float):
 
@@ -570,6 +536,7 @@ def smp(file_name: str, weight: str, sim_attr: str, ext_attr: str, threshold: fl
     return smpResult
 
 
+# Endpooint for comparing scalable and library maxP
 @app.get("/api/endpoint/compareMaxP")
 def compareMaxP(file_name: str, weight: str, sim_attr: str, ext_attr: str,
                 threshold: float):
@@ -588,5 +555,6 @@ def compareMaxP(file_name: str, weight: str, sim_attr: str, ext_attr: str,
     return comparisionResult
 
 
+# defining the port on which the api application starts
 if __name__ == "__main__":
     uvicorn.run(app, host="localhost", port=8000)
