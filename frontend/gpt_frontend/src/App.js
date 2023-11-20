@@ -26,7 +26,7 @@
 
 // export default App;
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import MapComponent from './MapComponent';
 import FileSelector from './FileSelector.js';
@@ -36,6 +36,22 @@ export const SelectedFileContext = React.createContext();
 
 function App() {
   const [selectedFile, setSelectedFile] = useState(null);
+  
+  // add tidio chatbot
+  
+  useEffect(() => {
+    // Load Tidio script on component mount
+    const script = document.createElement('script');
+    script.src = 'https://code.tidio.co/tmvcyrnqnvdk2xuajiyewmfakmvekzlw.js';
+    script.async = true;
+    document.body.appendChild(script);
+
+    return () => {
+      // Clean up Tidio script on component unmount
+      document.body.removeChild(script);
+    };
+  }, []);
+
 
   return (
     <div className="App">
